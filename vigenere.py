@@ -3,21 +3,9 @@
 # Cifrado
 
 import unidecode
-from math import gcd
+from frecuency import frequency_analysis
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
-
-def frequency_analysis(text):
-
-    frequency_analysis_data = {}
-    for letter in alphabet:
-        frequency_analysis_data[letter] = 0
-
-    for letter in text:
-        if letter in alphabet:
-            frequency_analysis_data[letter] += 1
-
-    return { letter: round(frequency_analysis_data[letter] / len(text), 3) for letter in alphabet }
 
 def encrypt(keyword, text):
 
@@ -64,7 +52,7 @@ def main():
             keyword = input("Ingrese la keyword: ")
             encrypted_text = encrypt(keyword, text)
             print("El texto encriptado es el siguiente: ", encrypted_text)
-            print("El analisis de frecuencias es el siguiente: ", frequency_analysis(encrypted_text))
+            print("El analisis de frecuencias es el siguiente: ", frequency_analysis(encrypted_text, alphabet))
         elif (option == 2):
             print("\nDesencriptar")
             text = input("Ingrese el texto a desencriptar: ")
