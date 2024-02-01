@@ -1,5 +1,5 @@
 import unidecode
-from math import gcd, floor
+from math import gcd
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
 
