@@ -1,6 +1,22 @@
+# Oscar Fernando López Barrios
+# Carné 20679
+# Cifrado
+
 import unidecode
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
+
+def frequency_analysis(text):
+
+    frequency_analysis_data = {}
+    for letter in alphabet:
+        frequency_analysis_data[letter] = 0
+
+    for letter in text:
+        if letter in alphabet:
+            frequency_analysis_data[letter] += 1
+
+    return { letter: round(frequency_analysis_data[letter] / len(text), 3) for letter in alphabet }
 
 def encrypt(key, text):
 
@@ -41,7 +57,9 @@ def main():
             print("\nEncriptar")
             text = input("Ingrese el texto a encriptar: ")
             key = int(input("Ingrese la key: "))
-            print("El texto encriptado es el siguiente: ", encrypt(key, text))
+            encrypted_text = encrypt(key, text)
+            print("El texto encriptado es el siguiente: ", encrypted_text)
+            print("El analisis de frecuencias es el siguiente: ", frequency_analysis(encrypted_text))
         elif (option == 2):
             print("\nDesencriptar")
             text = input("Ingrese el texto a desencriptar: ")

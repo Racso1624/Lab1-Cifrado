@@ -1,7 +1,23 @@
+# Oscar Fernando López Barrios
+# Carné 20679
+# Cifrado
+
 import unidecode
 from math import gcd
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
+
+def frequency_analysis(text):
+
+    frequency_analysis_data = {}
+    for letter in alphabet:
+        frequency_analysis_data[letter] = 0
+
+    for letter in text:
+        if letter in alphabet:
+            frequency_analysis_data[letter] += 1
+
+    return { letter: round(frequency_analysis_data[letter] / len(text), 3) for letter in alphabet }
 
 def encrypt(key_a, key_b, text):
 
@@ -47,7 +63,9 @@ def main():
             if (mcd_result != 1):
                 print("El factor comun entre la llave A y la cantidad de letras del alfabeto debe ser 1")
                 return
-            print("El texto encriptado es el siguiente: ", encrypt(key_a, key_b, text))
+            encrypted_text = encrypt(key_a, key_b, text)
+            print("El texto encriptado es el siguiente: ", encrypted_text)
+            print("El analisis de frecuencias es el siguiente: ", frequency_analysis(encrypted_text))
         elif (option == 2):
             print("\nDesencriptar")
             text = input("Ingrese el texto a desencriptar: ")
