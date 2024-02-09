@@ -52,19 +52,19 @@ def brute_force_decrypt(file_route):
     for i in range(len(alphabet)):
 
         key = letter_displacement % len(alphabet)
-        decrypted_text_tested = decrypt(key, ciphertext)
-        decrypted_text_tested_entropy = text_entropy(decrypted_text_tested)
+        key_text = decrypt(key, ciphertext)
+        key_text_entropy = text_entropy(key_text)
 
-        text_result[key] = decrypted_text_tested
-        decrypt_result[key] = decrypted_text_tested_entropy
+        text_result[key] = key_text
+        decrypt_result[key] = key_text_entropy
         letter_displacement += 1
 
-    sorted_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
-    sorted_keys = list(sorted_results.keys())
+    final_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
+    final_keys = list(final_results.keys())
 
     with open("results/results-caesar-bruteforce.txt", "w", encoding="utf-8") as file:
-        for key in sorted_keys:
-            file.write(f"key {key}: {text_result[key]}\n\n")
+        for key in final_keys:
+            file.write(f"key number {key}: {text_result[key]}\n")
 
 def main():
     print("Bienvenido al Sistema de Encriptación y Desencriptación")

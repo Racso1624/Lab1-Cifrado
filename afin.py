@@ -4,7 +4,7 @@
 
 import unidecode
 from math import gcd
-from frecuency import frequency_analysis
+from frecuency import frequency_analysis, text_entropy
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
 
@@ -32,6 +32,34 @@ def decrypt(key_a, key_b, text):
             decrypted_text += ' '
 
     return decrypted_text
+
+def brute_force_decrypt(file_route, keys_a, keys_b):
+
+    with open(file_route, 'r', encoding="utf-8") as file:
+        ciphertext = file.read()
+
+    min_a, max_a = keys_a
+    min_b, max_b = keys_b
+
+    decrypt_result = {}
+    text_result = {}
+
+    for a in range(min_a, max_a):
+        for b in range(min_b, max_b):
+
+            keys = a + "," + b
+            key_text = decrypt(a, b, ciphertext)
+            key_text_entropy = text_entropy(key_text)
+
+            text_result[keys] = key_text
+            decrypt_result[keys] = key_text_entropy
+
+    final_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
+    final_keys = list(final_results.keys())
+
+    with open("results/results-caesar-bruteforce.txt", "w", encoding="utf-8") as file:
+        for key in final_keys:
+            file.write(f"key number {key}: {text_result[key]}\n")
 
 def main():
     print("Bienvenido al Sistema de Encriptación y Desencriptación")
@@ -66,6 +94,10 @@ def main():
                 return
             print("El texto desencriptado es el siguiente: ", decrypt(key_a, key_b, text))
         elif (option == 3):
+            print("\nBruteforce")
+            file_route = input("Ingrese la ruta del archivo a desencriptar: ")
+            brute_force_decrypt(file_route)
+        elif (option == 4):
             condition = False
         else:
             print("\nIngrese otra opcion")

@@ -79,9 +79,9 @@ def text_entropy(text):
 
     text = text.upper()
 
-    local_probabilities = [(text.count(char) / len(text)) for char in set(text)]
-    global_probabilities = [(official_frequency_analysis.get(char, 0.0001)) for char in set(text)]
+    text_probability = [(text.count(char) / len(text)) for char in set(text)]
+    alphabet_probability = [(official_frequency_analysis.get(char, 0.0001)) for char in set(text)]
 
-    text_entropy_value = sum([(probability * math.log2(probability / q_probability)) for probability, q_probability in zip(local_probabilities, global_probabilities)])
+    entropy_result = sum([(x * math.log2(x / y)) for x, y in zip(text_probability, alphabet_probability)])
 
-    return text_entropy_value
+    return entropy_result
