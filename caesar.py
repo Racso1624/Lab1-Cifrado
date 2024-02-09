@@ -3,7 +3,7 @@
 # Cifrado
 
 import unidecode
-from frecuency import frequency_analysis, frecuency_visual_comparison, text_entropy
+from frecuency import frequency_analysis, frecuency_visual_comparison, test_text_metric
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
 top_alphabet_letter = "E"
@@ -40,7 +40,7 @@ def brute_force_decrypt(file_route):
     
     frequency_analysis_result = frequency_analysis(ciphertext, alphabet)
 
-    decrypt_result = {}
+    decrypt_result_metric = {}
     text_result = {}
 
     top_frecuency_letter = max(frequency_analysis_result.items(), key=lambda item: item[1])[0]
@@ -53,13 +53,13 @@ def brute_force_decrypt(file_route):
 
         key = letter_displacement % len(alphabet)
         key_text = decrypt(key, ciphertext)
-        key_text_entropy = text_entropy(key_text)
+        key_text_metric = test_text_metric(key_text)
 
         text_result[key] = key_text
-        decrypt_result[key] = key_text_entropy
+        decrypt_result_metric[key] = key_text_metric
         letter_displacement += 1
 
-    final_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
+    final_results = dict(sorted(decrypt_result_metric.items(), key=lambda item: item[1]))
     final_keys = list(final_results.keys())
 
     with open("results/results-caesar-bruteforce.txt", "w", encoding="utf-8") as file:

@@ -75,13 +75,13 @@ def frecuency_visual_comparison(frequency_result):
 
     plt.show()
 
-def text_entropy(text):
+def test_text_metric(text):
 
     text = text.upper()
 
     text_probability = [(text.count(char) / len(text)) for char in set(text)]
     alphabet_probability = [(official_frequency_analysis.get(char, 0.0001)) for char in set(text)]
 
-    entropy_result = sum([(x * math.log2(x / y)) for x, y in zip(text_probability, alphabet_probability)])
+    metric_result = sum([(x * math.log2(x / y)) for x, y in zip(text_probability, alphabet_probability)])
 
-    return entropy_result
+    return metric_result

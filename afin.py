@@ -4,7 +4,7 @@
 
 import unidecode
 from math import gcd
-from frecuency import frequency_analysis, text_entropy
+from frecuency import frequency_analysis, test_text_metric
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
 
@@ -41,23 +41,24 @@ def brute_force_decrypt(file_route, keys_a, keys_b):
     min_a, max_a = keys_a
     min_b, max_b = keys_b
 
-    decrypt_result = {}
+    decrypt_result_metric = {}
     text_result = {}
 
     for a in range(min_a, max_a):
-        for b in range(min_b, max_b):
+        if (gcd(a, len(alphabet)) == 1):
+            for b in range(min_b, max_b):
 
-            keys = a + "," + b
-            key_text = decrypt(a, b, ciphertext)
-            key_text_entropy = text_entropy(key_text)
+                keys = str(a) + "," + str(b)
+                key_text = decrypt(a, b, ciphertext)
+                key_text_metric = test_text_metric(key_text)
 
-            text_result[keys] = key_text
-            decrypt_result[keys] = key_text_entropy
+                text_result[keys] = key_text
+                decrypt_result_metric[keys] = key_text_metric
 
-    final_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
+    final_results = dict(sorted(decrypt_result_metric.items(), key=lambda item: item[1]))
     final_keys = list(final_results.keys())
 
-    with open("results/results-caesar-bruteforce.txt", "w", encoding="utf-8") as file:
+    with open("results/results-afin-bruteforce.txt", "w", encoding="utf-8") as file:
         for key in final_keys:
             file.write(f"key number {key}: {text_result[key]}\n")
 
@@ -66,7 +67,8 @@ def main():
     print("Tiene las siguientes opciones:")
     print("1) Encriptar")
     print("2) Desencriptar")
-    print("3) Salir")
+    print("3) Bruteforce")
+    print("4) Salir")
 
     condition = True
     while(condition):
@@ -96,7 +98,7 @@ def main():
         elif (option == 3):
             print("\nBruteforce")
             file_route = input("Ingrese la ruta del archivo a desencriptar: ")
-            brute_force_decrypt(file_route)
+            brute_force_decrypt(file_route, (20, 25), (5, 10))
         elif (option == 4):
             condition = False
         else:
