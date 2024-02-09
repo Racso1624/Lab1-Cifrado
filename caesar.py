@@ -3,9 +3,10 @@
 # Cifrado
 
 import unidecode
-from frecuency import frequency_analysis, frecuency_visual_comparison
+from frecuency import frequency_analysis, frecuency_visual_comparison, text_entropy
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
+top_alphabet_letter = "E"
 
 def encrypt(key, text):
 
@@ -32,12 +33,46 @@ def decrypt(key, text):
 
     return decrypted_text
 
+def brute_force_decrypt(file_route):
+
+    with open(file_route, 'r', encoding="utf-8") as file:
+        ciphertext = file.read()
+    
+    frequency_analysis_result = frequency_analysis(ciphertext, alphabet)
+
+    decrypt_result = {}
+    text_result = {}
+
+    top_frecuency_letter = max(frequency_analysis_result.items(), key=lambda item: item[1])[0]
+    letter_displacement = alphabet.index(top_frecuency_letter) - alphabet.index(top_alphabet_letter)
+
+    if (letter_displacement < 0):
+        letter_displacement = len(alphabet) + letter_displacement
+
+    for i in range(len(alphabet)):
+
+        key = letter_displacement % len(alphabet)
+        decrypted_text_tested = decrypt(key, ciphertext)
+        decrypted_text_tested_entropy = text_entropy(decrypted_text_tested)
+
+        text_result[key] = decrypted_text_tested
+        decrypt_result[key] = decrypted_text_tested_entropy
+        letter_displacement += 1
+
+    sorted_results = dict(sorted(decrypt_result.items(), key=lambda item: item[1]))
+    sorted_keys = list(sorted_results.keys())
+
+    with open("results/results-caesar-bruteforce.txt", "w", encoding="utf-8") as file:
+        for key in sorted_keys:
+            file.write(f"key {key}: {text_result[key]}\n\n")
+
 def main():
     print("Bienvenido al Sistema de Encriptación y Desencriptación")
     print("Tiene las siguientes opciones:")
     print("1) Encriptar")
     print("2) Desencriptar")
-    print("3) Salir")
+    print("3) Bruteforce")
+    print("4) Salir")
 
     condition = True
     while(condition):
@@ -57,6 +92,10 @@ def main():
             key = int(input("Ingrese la key: "))
             print("El texto desencriptado es el siguiente: ", decrypt(key, text))
         elif (option == 3):
+            print("\nBruteforce")
+            file_route = input("Ingrese la ruta del archivo a desencriptar: ")
+            brute_force_decrypt(file_route)
+        elif (option == 4):
             condition = False
         else:
             print("\nIngrese otra opcion")
