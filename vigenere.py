@@ -3,7 +3,8 @@
 # Cifrado
 
 import unidecode
-from frecuency import frequency_analysis
+from itertools import product
+from frecuency import frequency_analysis, test_text_metric
 
 alphabet = ('ABCDEFGHIJKLMNÑOPQRSTUVWXYZ')
 
@@ -36,12 +37,39 @@ def decrypt(keyword, text):
 
     return decrypted_text
 
+def brute_force_decrypt(file_route, key_lenght):
+
+    with open(file_route, 'r', encoding="utf-8") as file:
+        ciphertext = file.read()
+
+    decrypt_result_metric = {}
+    text_result = {}
+
+    permutations = product(alphabet, repeat=key_lenght)
+    permutation_list = ["BE" + "".join(permutation) for permutation in permutations]
+
+    for key in permutation_list:
+
+        key_text = decrypt(ciphertext, key)
+        key_text_metric = test_text_metric(key_text)
+
+        text_result[key] = key_text
+        decrypt_result_metric[key] = key_text_metric
+
+    final_results = dict(sorted(decrypt_result_metric.items(), key=lambda item: item[1]))
+    final_keys = list(final_results.keys())
+
+    with open("results/results-vigenere-bruteforce.txt", "w", encoding="utf-8") as file:
+        for key in final_keys:
+            file.write(f"key {key}: {text_result[key]}\n")
+
 def main():
     print("Bienvenido al Sistema de Encriptación y Desencriptación")
     print("Tiene las siguientes opciones:")
     print("1) Encriptar")
     print("2) Desencriptar")
-    print("3) Salir")
+    print("3) Bruteforce")
+    print("4) Salir")
 
     condition = True
     while(condition):
@@ -59,6 +87,10 @@ def main():
             keyword = input("Ingrese la keyword: ")
             print("El texto desencriptado es el siguiente: ", decrypt(keyword, text))
         elif (option == 3):
+            print("\nBruteforce")
+            file_route = input("Ingrese la ruta del archivo a desencriptar: ")
+            brute_force_decrypt(file_route, 2)
+        elif (option == 4):
             condition = False
         else:
             print("\nIngrese otra opcion")
