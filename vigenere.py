@@ -37,7 +37,7 @@ def decrypt(keyword, text):
 
     return decrypted_text
 
-def brute_force_decrypt(file_route, key_lenght):
+def brute_force_decrypt(file_route, lenght_key):
 
     with open(file_route, 'r', encoding="utf-8") as file:
         ciphertext = file.read()
@@ -45,10 +45,10 @@ def brute_force_decrypt(file_route, key_lenght):
     decrypt_result_metric = {}
     text_result = {}
 
-    permutations = product(alphabet, repeat=key_lenght)
-    permutation_list = ["BE" + "".join(permutation) for permutation in permutations]
+    permutations = product(alphabet, repeat=lenght_key)
+    keys_list = ["".join(permutation) for permutation in permutations]
 
-    for key in permutation_list:
+    for key in keys_list:
 
         key_text = decrypt(key, ciphertext)
         key_text_metric = test_text_metric(key_text)
@@ -89,7 +89,7 @@ def main():
         elif (option == 3):
             print("\nBruteforce")
             file_route = input("Ingrese la ruta del archivo a desencriptar: ")
-            brute_force_decrypt(file_route, 2)
+            brute_force_decrypt(file_route, 4)
         elif (option == 4):
             condition = False
         else:
