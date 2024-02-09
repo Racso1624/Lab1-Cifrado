@@ -50,7 +50,7 @@ def brute_force_decrypt(file_route, key_lenght):
 
     for key in permutation_list:
 
-        key_text = decrypt(ciphertext, key)
+        key_text = decrypt(key, ciphertext)
         key_text_metric = test_text_metric(key_text)
 
         text_result[key] = key_text
